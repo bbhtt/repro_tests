@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: main
+    paths-ignore:
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README.md'
+  pull_request:
+    branches: main
+    paths-ignore:
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    concurrency:
+      group: ci-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+        # 4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: "3.12"
+
+      - name: Set up dependencies
+        run: |
+          sudo add-apt-repository ppa:flatpak/stable
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends jq flatpak \
+            desktop-file-utils elfutils flatpak-builder curl \
+            dbus-daemon ostree python-pip
+          sudo apt-get install -y diffoscope 
+
+      - name: Install checker
+        run: |
+            pip install --user --break-system-packages git+https://github.com/flathub-infra/flathub-repro-checker.git@v0.1.4#egg=flathub_repro_checker
+            sudo ln -s ~/.local/bin/flathub-repro-checker /usr/bin/flathub-repro-checker
+
+      - name: Run check on io.bassi.Amberol
+        continue-on-error: true
+        run: flathub-repro-checker --appid io.bassi.Amberol
+
+      - name: Upload result of io.bassi.Amberol
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-io.bassi.Amberol-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-io.bassi.Amberol
+
+      - name: Run check on org.kde.audiotube
+        continue-on-error: true
+        run: flathub-repro-checker --appid org.kde.audiotube
+
+      - name: Upload result of org.kde.audiotube
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-org.kde.audiotube-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-org.kde.audiotube
+
+      - name: Run check on page.kramo.Sly
+        continue-on-error: true
+        run: flathub-repro-checker --appid page.kramo.Sly
+
+      - name: Upload result of page.kramo.Sly
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-page.kramo.Sly-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-page.kramo.Sly
+
+      - name: Run check on im.riot.Riot
+        continue-on-error: true
+        run: flathub-repro-checker --appid im.riot.Riot
+
+      - name: Upload result of im.riot.Riot
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-im.riot.Riot-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-im.riot.Riot
+
+      - name: Run check on dev.zed.Zed
+        continue-on-error: true
+        run: flathub-repro-checker --appid dev.zed.Zed
+
+      - name: Upload result of dev.zed.Zed
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-dev.zed.Zed-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-dev.zed.Zed
+
+      - name: Run check on net.hhoney.rota
+        continue-on-error: true
+        run: flathub-repro-checker --appid net.hhoney.rota
+
+      - name: Upload result of net.hhoney.rota
+        # 4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diffoscope-net.hhoney.rota-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-net.hhoney.rota
