@@ -41,16 +41,18 @@ jobs:
               flathub-repro-checker --appid "$APPID" || true
           }
 
-          run_check com.google.Chrome
-          run_check com.discordapp.Discord
-          run_check com.brave.Browser
-          run_check org.vinegarhq.Sober
-          run_check com.valvesoftware.Steam
           run_check com.spotify.Client
+          run_check org.DolphinEmu.dolphin-emu
+          run_check io.github.flattool.Warehouse
+          run_check org.ppsspp.PPSSPP
+          run_check net.davidotek.pupgui2
+          run_check com.github.tchx84.Flatseal
+          run_check it.mijorus.gearlever
+          run_check com.mattjakeman.ExtensionManager
 
       - name: Upload results
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-com.spotify.Client-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          name: diffoscope-results-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
           path: ./reproworkdir/diffoscope_result-*
