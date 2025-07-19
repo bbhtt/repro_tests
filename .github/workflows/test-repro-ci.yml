@@ -38,13 +38,17 @@ jobs:
               flathub-repro-checker --appid "$APPID" || true
           }
 
-          run_check org.DolphinEmu.dolphin-emu
-          run_check net.kuribo64.melonDS
-          run_check app.xemu.xemu
-          run_check com.visualstudio.code
-          run_check io.github.shiiion.primehack
-          run_check org.qbittorrent.qBittorrent
-          run_check com.supermodel3.Supermodel
+          run_check org.kde.okular
+          run_check app.zen_browser.zen
+          run_check com.bitwarden.desktop
+          run_check com.microsoft.Edge
+          run_check org.prismlauncher.PrismLauncher
+          run_check md.obsidian.Obsidian
+          run_check com.ranfdev.DistroShelf
+          run_check io.missioncenter.MissionCenter
+          run_check org.kde.filelight
+          run_check org.kde.kcalc
+
 
       - name: Upload results
         # 4.6.2
