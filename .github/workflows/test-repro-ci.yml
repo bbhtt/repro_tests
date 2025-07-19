@@ -38,14 +38,13 @@ jobs:
               flathub-repro-checker --appid "$APPID" || true
           }
 
-          run_check com.spotify.Client
           run_check org.DolphinEmu.dolphin-emu
-          run_check io.github.flattool.Warehouse
-          run_check org.ppsspp.PPSSPP
-          run_check net.davidotek.pupgui2
-          run_check com.github.tchx84.Flatseal
-          run_check it.mijorus.gearlever
-          run_check com.mattjakeman.ExtensionManager
+          run_check net.kuribo64.melonDS
+          run_check app.xemu.xemu
+          run_check com.visualstudio.code
+          run_check io.github.shiiion.primehack
+          run_check org.qbittorrent.qBittorrent
+          run_check com.supermodel3.Supermodel
 
       - name: Upload results
         # 4.6.2
