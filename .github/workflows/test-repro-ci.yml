@@ -18,9 +18,6 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
-    concurrency:
-      group: ci-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - name: Create work directory
         run: |
