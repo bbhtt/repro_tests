@@ -22,11 +22,6 @@ jobs:
       group: ci-${{ github.ref }}
       cancel-in-progress: true
     steps:
-        # 4.2.2
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-
       - name: Run check on com.google.Chrome
         continue-on-error: true
         run: flathub-repro-checker --appid com.google.Chrome
