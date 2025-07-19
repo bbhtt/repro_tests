@@ -10,80 +10,47 @@ on:
       - 'docker/**'
   workflow_dispatch:
 
+env:
+  IMAGE: ghcr.io/flathub-infra/reproducibility-tests:latest
+
 jobs:
   ci:
     runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/flathub-infra/reproducibility-tests:latest
-      options: --privileged
     permissions:
       contents: read
     concurrency:
       group: ci-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Run check on com.google.Chrome
+      - name: Create work directory
+        run: |
+          mkdir -p ${GITHUB_WORKSPACE}/reproworkdir
+          chmod -R 777 ${GITHUB_WORKSPACE}/reproworkdir
+
+      - name: Run checks
         continue-on-error: true
-        run: flathub-repro-checker --appid com.google.Chrome
+        run: |
+          run_check() {
+            APPID="$1"
+            docker run --rm \
+              --privileged \
+              --entrypoint="" \
+              -v "${GITHUB_WORKSPACE}/reproworkdir:/reproworkdir" \
+              -w /reproworkdir \
+              ${{ env.IMAGE }} \
+              flathub-repro-checker --appid "$APPID" || true
+          }
 
-      - name: Upload result of com.google.Chrome
-        # 4.6.2
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: diffoscope-com.google.Chrome-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-com.google.Chrome
+          run_check com.google.Chrome
+          run_check com.discordapp.Discord
+          run_check com.brave.Browser
+          run_check org.vinegarhq.Sober
+          run_check com.valvesoftware.Steam
+          run_check com.spotify.Client
 
-      - name: Run check on com.discordapp.Discord
-        continue-on-error: true
-        run: flathub-repro-checker --appid com.discordapp.Discord
-
-      - name: Upload result of com.discordapp.Discord
-        # 4.6.2
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: diffoscope-com.discordapp.Discord-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-com.discordapp.Discord
-
-      - name: Run check on com.brave.Browser
-        continue-on-error: true
-        run: flathub-repro-checker --appid com.brave.Browser
-
-      - name: Upload result of com.brave.Browser
-        # 4.6.2
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: diffoscope-com.brave.Browser-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-com.brave.Browser
-
-      - name: Run check on org.vinegarhq.Sober
-        continue-on-error: true
-        run: flathub-repro-checker --appid org.vinegarhq.Sober
-
-      - name: Upload result of org.vinegarhq.Sober
-        # 4.6.2
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: diffoscope-org.vinegarhq.Sober-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-org.vinegarhq.Sober
-
-      - name: Run check on com.valvesoftware.Steam
-        continue-on-error: true
-        run: flathub-repro-checker --appid com.valvesoftware.Steam
-
-      - name: Upload result of com.valvesoftware.Steam
-        # 4.6.2
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: diffoscope-com.valvesoftware.Steam-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-com.valvesoftware.Steam
-
-      - name: Run check on com.spotify.Client
-        continue-on-error: true
-        run: flathub-repro-checker --appid com.spotify.Client
-
-      - name: Upload result of com.spotify.Client
+      - name: Upload results
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: diffoscope-com.spotify.Client-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-com.spotify.Client
+          path: ./reproworkdir/diffoscope_result-*
