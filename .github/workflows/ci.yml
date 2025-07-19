@@ -47,68 +47,68 @@ jobs:
             pip install --user --break-system-packages git+https://github.com/flathub-infra/flathub-repro-checker.git@v0.1.4#egg=flathub_repro_checker
             sudo ln -s ~/.local/bin/flathub-repro-checker /usr/bin/flathub-repro-checker
 
-      - name: Run check on io.bassi.Amberol
+      - name: Run check on com.google.Chrome
         continue-on-error: true
-        run: flathub-repro-checker --appid io.bassi.Amberol
+        run: flathub-repro-checker --appid com.google.Chrome
 
-      - name: Upload result of io.bassi.Amberol
+      - name: Upload result of com.google.Chrome
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-io.bassi.Amberol-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-io.bassi.Amberol
+          name: diffoscope-com.google.Chrome-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-com.google.Chrome
 
-      - name: Run check on org.kde.audiotube
+      - name: Run check on com.discordapp.Discord
         continue-on-error: true
-        run: flathub-repro-checker --appid org.kde.audiotube
+        run: flathub-repro-checker --appid com.discordapp.Discord
 
-      - name: Upload result of org.kde.audiotube
+      - name: Upload result of com.discordapp.Discord
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-org.kde.audiotube-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-org.kde.audiotube
+          name: diffoscope-com.discordapp.Discord-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-com.discordapp.Discord
 
-      - name: Run check on page.kramo.Sly
+      - name: Run check on com.brave.Browser
         continue-on-error: true
-        run: flathub-repro-checker --appid page.kramo.Sly
+        run: flathub-repro-checker --appid com.brave.Browser
 
-      - name: Upload result of page.kramo.Sly
+      - name: Upload result of com.brave.Browser
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-page.kramo.Sly-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-page.kramo.Sly
+          name: diffoscope-com.brave.Browser-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-com.brave.Browser
 
-      - name: Run check on im.riot.Riot
+      - name: Run check on org.vinegarhq.Sober
         continue-on-error: true
-        run: flathub-repro-checker --appid im.riot.Riot
+        run: flathub-repro-checker --appid org.vinegarhq.Sober
 
-      - name: Upload result of im.riot.Riot
+      - name: Upload result of org.vinegarhq.Sober
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-im.riot.Riot-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-im.riot.Riot
+          name: diffoscope-org.vinegarhq.Sober-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-org.vinegarhq.Sober
 
-      - name: Run check on dev.zed.Zed
+      - name: Run check on com.valvesoftware.Steam
         continue-on-error: true
-        run: flathub-repro-checker --appid dev.zed.Zed
+        run: flathub-repro-checker --appid com.valvesoftware.Steam
 
-      - name: Upload result of dev.zed.Zed
+      - name: Upload result of com.valvesoftware.Steam
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-dev.zed.Zed-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-dev.zed.Zed
+          name: diffoscope-com.valvesoftware.Steam-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-com.valvesoftware.Steam
 
-      - name: Run check on net.hhoney.rota
+      - name: Run check on com.spotify.Client
         continue-on-error: true
-        run: flathub-repro-checker --appid net.hhoney.rota
+        run: flathub-repro-checker --appid com.spotify.Client
 
-      - name: Upload result of net.hhoney.rota
+      - name: Upload result of com.spotify.Client
         # 4.6.2
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: diffoscope-net.hhoney.rota-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
-          path: ./diffoscope_result-net.hhoney.rota
+          name: diffoscope-com.spotify.Client-${{ github.sha }}-${{ github.run_id }}-${{ github.job }}-${{ github.run_attempt }}
+          path: ./diffoscope_result-com.spotify.Client
