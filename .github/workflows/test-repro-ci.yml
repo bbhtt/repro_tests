@@ -13,6 +13,9 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/flathub-infra/reproducibility-tests:latest
+      options: --privileged
     permissions:
       contents: read
     concurrency:
@@ -23,24 +26,6 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-
-      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
-        with:
-          python-version: "3.12"
-
-      - name: Set up dependencies
-        run: |
-          sudo add-apt-repository ppa:flatpak/stable
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends jq flatpak \
-            desktop-file-utils elfutils flatpak-builder curl \
-            dbus-daemon ostree python-pip
-          sudo apt-get install -y diffoscope 
-
-      - name: Install checker
-        run: |
-            pip install --user --break-system-packages git+https://github.com/flathub-infra/flathub-repro-checker.git@v0.1.4#egg=flathub_repro_checker
-            sudo ln -s ~/.local/bin/flathub-repro-checker /usr/bin/flathub-repro-checker
 
       - name: Run check on com.google.Chrome
         continue-on-error: true
