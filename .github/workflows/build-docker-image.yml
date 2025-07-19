@@ -3,6 +3,9 @@ name: Docker
 on:
   push:
     branches: main
+    paths:
+      - 'docker/**'
+      - '.github/workflows/build-docker-image.yml'
   workflow_dispatch:
 
 jobs:
