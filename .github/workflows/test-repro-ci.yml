@@ -80,7 +80,7 @@ jobs:
               -e GITHUB_RUN_ID \
               -w /reproworkdir \
               ${{ env.IMAGE }} \
-              flathub-repro-checker --json --appid "$APPID"
+              flathub-repro-checker --appid "$APPID"
           }
 
           run_check io.bassi.Amberol
