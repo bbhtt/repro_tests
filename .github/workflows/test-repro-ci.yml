@@ -77,11 +77,14 @@ jobs:
               -e TMPDIR=/reproworkdir/tmp \
               -w /reproworkdir \
               ${{ env.IMAGE }} \
-              flathub-repro-checker --appid "$APPID" || true
+              flathub-repro-checker --json --appid "$APPID"
           }
 
-          run_check page.kramo.Sly
-          run_check io.github.lo2dev.Echo
+          run_check io.bassi.Amberol
+          run_check com.valvesoftware.Steam
+          run_check com.spotify.Client
+          run_check it.mijorus.gearlever
+          run_check com.visualstudio.code
 
       - name: Upload results
         # 4.6.2
