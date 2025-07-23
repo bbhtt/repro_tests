@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/flathub-infra/reproducibility-tests:latest
+  IMAGE: ghcr.io/flathub-infra/flatpak-builder-lint:unprivileged
 
 jobs:
   ci:
@@ -46,10 +46,21 @@ jobs:
           sudo apt-get clean || true
           sudo rm -rf /var/lib/apt/lists/*
 
+      - name: Enable unprivileged user namespaces
+        run: |
+          sudo aa-teardown >/dev/null 2>&1 || true
+          sudo systemctl disable --now apparmor.service >/dev/null 2>&1
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Create work directory
         run: |
           mkdir -p ${GITHUB_WORKSPACE}/reproworkdir
+          mkdir -p ${GITHUB_WORKSPACE}/reproworkdir/tmp
           chmod -R 777 ${GITHUB_WORKSPACE}/reproworkdir
+
+      - name: Download seccomp profile
+        run: curl -s https://raw.githubusercontent.com/flathub-infra/vorarbeiter/refs/heads/main/flatpak.seccomp.json -o flatpak.seccomp.json
 
       - name: Run checks
         continue-on-error: true
@@ -57,21 +68,20 @@ jobs:
           run_check() {
             APPID="$1"
             docker run --rm \
-              --privileged \
               --entrypoint="" \
+              --security-opt seccomp=${GITHUB_WORKSPACE}/flatpak.seccomp.json \
+              --security-opt apparmor=unconfined \
+              --cap-drop all \
+              -v /proc:/host/proc \
               -v "${GITHUB_WORKSPACE}/reproworkdir:/reproworkdir" \
+              -e TMPDIR=/reproworkdir/tmp \
               -w /reproworkdir \
               ${{ env.IMAGE }} \
               flathub-repro-checker --appid "$APPID" || true
           }
 
-          run_check org.kde.okular
-          run_check org.prismlauncher.PrismLauncher
-          run_check com.ranfdev.DistroShelf
-          run_check io.missioncenter.MissionCenter
-          run_check org.kde.filelight
-          run_check org.kde.kcalc
-
+          run_check page.kramo.Sly
+          run_check io.github.lo2dev.Echo
 
       - name: Upload results
         # 4.6.2
